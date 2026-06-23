@@ -32,13 +32,17 @@ function sanitize(text) {
   return text.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 12);
 }
 
+function clampLength(value) {
+  return Math.min(MAX_LENGTH, Math.max(MIN_LENGTH, value));
+}
+
 function buildUsername(options) {
   const selectedPools =
     options.style === "all" ? Object.values(pools) : [pools[options.style]];
 
   const source = sample(selectedPools);
   const keyword = sanitize(options.keyword);
-  const maxLength = Math.min(MAX_LENGTH, Math.max(MIN_LENGTH, options.maxLength));
+  const maxLength = clampLength(options.maxLength);
   const base = [sample(source.prefixes), keyword, sample(source.suffixes)].filter(Boolean);
   let username = base.join(options.separator);
 
@@ -69,7 +73,7 @@ function generateList() {
         style,
         keyword,
         separator,
-        maxLength: Math.min(MAX_LENGTH, Math.max(MIN_LENGTH, maxLength)),
+        maxLength: clampLength(maxLength),
         withNumber,
       })
     );
