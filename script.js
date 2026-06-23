@@ -13,8 +13,19 @@ const pools = {
   },
 };
 
+const MIN_LENGTH = 6;
+const MAX_LENGTH = 25;
+const TARGET_USERNAME_COUNT = 8;
+const MAX_GENERATION_ATTEMPTS = 200;
+
+function randomInt(max) {
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  return array[0] % max;
+}
+
 function sample(items) {
-  return items[Math.floor(Math.random() * items.length)];
+  return items[randomInt(items.length)];
 }
 
 function sanitize(text) {
@@ -27,11 +38,11 @@ function buildUsername(options) {
 
   const source = sample(selectedPools);
   const keyword = sanitize(options.keyword);
-  const maxLength = Math.min(25, Math.max(6, options.maxLength));
+  const maxLength = Math.min(MAX_LENGTH, Math.max(MIN_LENGTH, options.maxLength));
   const base = [sample(source.prefixes), keyword, sample(source.suffixes)].filter(Boolean);
   let username = base.join(options.separator);
 
-  const numberChunk = `${options.separator}${Math.floor(100 + Math.random() * 900)}`;
+  const numberChunk = `${options.separator}${100 + randomInt(900)}`;
   if (options.withNumber && username.length + numberChunk.length <= maxLength) {
     username += numberChunk;
   }
@@ -52,13 +63,13 @@ function generateList() {
   results.innerHTML = "";
   let attempts = 0;
 
-  while (seen.size < 8 && attempts < 200) {
+  while (seen.size < TARGET_USERNAME_COUNT && attempts < MAX_GENERATION_ATTEMPTS) {
     seen.add(
       buildUsername({
         style,
         keyword,
         separator,
-        maxLength: Math.min(25, Math.max(6, maxLength)),
+        maxLength: Math.min(MAX_LENGTH, Math.max(MIN_LENGTH, maxLength)),
         withNumber,
       })
     );

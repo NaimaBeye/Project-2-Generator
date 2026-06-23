@@ -4,4 +4,4 @@ A simple static site that generates cool, trendy, slightly unique Instagram user
 
 ## Run locally
 
-Open `/home/runner/work/Project-2-Generator/Project-2-Generator/index.html` in a browser.
+Open `index.html` in a browser.
