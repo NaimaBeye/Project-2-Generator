@@ -15,6 +15,7 @@ const pools = {
 
 const MIN_LENGTH = 6;
 const MAX_LENGTH = 25;
+const MAX_KEYWORD_LENGTH = 12;
 const TARGET_USERNAME_COUNT = 8;
 const MAX_GENERATION_ATTEMPTS = 200;
 
@@ -29,7 +30,7 @@ function sample(items) {
 }
 
 function sanitize(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 12);
+  return text.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, MAX_KEYWORD_LENGTH);
 }
 
 function clampLength(value) {
@@ -52,7 +53,7 @@ function buildUsername(options) {
   }
 
   username = username.slice(0, maxLength);
-  return username.replace(/^[_\.]+|[_\.]+$/g, "");
+  return username.replace(/^[_.]+|[_.]+$/g, "");
 }
 
 function generateList() {
