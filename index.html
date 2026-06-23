@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insta Username Generator</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>Instagram Username Generator</h1>
+      <p class="subtitle">Create cool, trendy, slightly unique username ideas.</p>
+
+      <section class="controls">
+        <label>
+          Vibe
+          <select id="style">
+            <option value="all">All</option>
+            <option value="soft">Soft</option>
+            <option value="edgy">Edgy</option>
+            <option value="clean">Clean</option>
+          </select>
+        </label>
+
+        <label>
+          Keyword
+          <input id="keyword" type="text" maxlength="12" placeholder="e.g. luna" />
+        </label>
+
+        <label>
+          Separator
+          <select id="separator">
+            <option value="">None</option>
+            <option value=".">Dot (.)</option>
+            <option value="_">Underscore (_)</option>
+          </select>
+        </label>
+
+        <label>
+          Max length
+          <input id="maxLength" type="number" min="6" max="25" value="18" />
+        </label>
+
+        <label class="inline">
+          <input id="withNumber" type="checkbox" checked />
+          Include number
+        </label>
+      </section>
+
+      <button id="generateBtn" type="button">Generate usernames</button>
+
+      <ul id="results" aria-live="polite"></ul>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
