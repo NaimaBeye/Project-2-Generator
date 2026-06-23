@@ -73,7 +73,7 @@ function generateList() {
         style,
         keyword,
         separator,
-        maxLength: clampLength(maxLength),
+        maxLength,
         withNumber,
       })
     );
