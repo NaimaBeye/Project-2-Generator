@@ -113,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   lengthInput.addEventListener("input", (e) => {
     lengthValue.textContent = e.target.value;
+    generateUsernames();
   });
 
   uiFontSelect.addEventListener("change", applyFonts);
@@ -144,17 +145,85 @@ function cleanText(text) {
   return text.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
+function enforceExactLength(username, targetLength, bank) {
+  let value = username;
+
+  if (value.length > targetLength) {
+    value = value.slice(0, targetLength);
+  }
+
+  if (value.length < targetLength) {
+    const filler = cleanText(`${rand(bank.mids)}${rand(bank.suffixes)}${rand(bank.prefixes)}`) || "x";
+    let i = 0;
+    while (value.length < targetLength) {
+      value += filler[i % filler.length];
+      i += 1;
+    }
+  }
+
+  return value;
+}
+
+function enforceRequiredTokens(username, tokens, targetLength) {
+  const required = tokens.filter(Boolean);
+  if (required.length === 0) return username;
+
+  if (required.every((token) => cleanText(username).includes(token))) return username;
+
+  const separator = username.includes(".") ? "." : username.includes("_") ? "_" : "";
+  let rebuilt = username;
+
+  required.forEach((token) => {
+    if (!cleanText(rebuilt).includes(token)) {
+      const plain = cleanText(rebuilt);
+      const split = Math.floor(plain.length / 2);
+      const patterns = [
+        separator ? `${token}${separator}${plain}` : `${token}${plain}`,
+        separator ? `${plain}${separator}${token}` : `${plain}${token}`,
+        separator
+          ? `${plain.slice(0, split)}${separator}${token}${separator}${plain.slice(split)}`
+          : `${plain.slice(0, split)}${token}${plain.slice(split)}`,
+      ];
+      rebuilt = rand(patterns);
+    }
+  });
+
+  // Keep length preference when possible, but never at the cost of dropping required tokens.
+  if (rebuilt.length > targetLength) {
+    const trimmed = rebuilt.slice(0, targetLength);
+    if (required.every((token) => cleanText(trimmed).includes(token))) {
+      rebuilt = trimmed;
+    }
+  }
+
+  return rebuilt;
+}
+
 function generateUsername() {
   const theme = themeSelect.value;
   const coreWord = cleanText(coreWordInput.value).slice(0, 12);
   const mediaRef = cleanText(mediaRefInput.value).slice(0, 12);
   const style = styleSelect.value;
-  const targetLength = parseInt(lengthInput.value);
+  const requestedLength = parseInt(lengthInput.value, 10);
+  const targetLength = Math.max(3, requestedLength);
   const bank = wordbanks[theme];
 
   let username = "";
 
-  if (coreWord) {
+  if (coreWord && mediaRef) {
+    const prefix = rand(bank.prefixes);
+    const mid = rand(bank.mids);
+    const suffix = rand(bank.suffixes);
+    const patterns = [
+      `${mediaRef}.${coreWord}${suffix}`,
+      `${coreWord}_${mediaRef}`,
+      `${prefix}${mediaRef}${suffix}`,
+      `${mid}.${mediaRef}.${coreWord}`,
+      `${coreWord}${mid}${mediaRef}`,
+      `${mediaRef}${mid}${coreWord}`,
+    ];
+    username = rand(patterns);
+  } else if (coreWord) {
     // Use core word as base
     const prefix = rand(bank.prefixes);
     const suffix = rand(bank.suffixes);
@@ -166,9 +235,19 @@ function generateUsername() {
     ];
     username = rand(patterns);
   } else if (mediaRef) {
-    // Use media reference
+    // Use media reference in varied positions
+    const prefix = rand(bank.prefixes);
+    const mid = rand(bank.mids);
     const suffix = rand(bank.suffixes);
-    username = `${mediaRef}${suffix}`;
+    const patterns = [
+      `${mediaRef}${suffix}`,
+      `${prefix}${mediaRef}`,
+      `${mid}.${mediaRef}`,
+      `${mediaRef}_${mid}`,
+      `${suffix}${mediaRef}`,
+      `${mid}${mediaRef}${suffix}`,
+    ];
+    username = rand(patterns);
   } else {
     // Random generation
     const prefix = rand(bank.prefixes);
@@ -223,6 +302,12 @@ function generateUsername() {
     if (emojiSet.includes(match)) return match;
     return "";
   });
+
+  // Final guard: include required user terms when provided.
+  username = enforceRequiredTokens(username, [coreWord, mediaRef], targetLength);
+
+  // Ensure final output still honors the resolved target length.
+  username = enforceExactLength(username, targetLength, bank);
 
   return username.length >= 3 ? username : generateUsername();
 }
@@ -433,12 +518,12 @@ function getFilteredEmojis() {
     red: ["❤️", "🔴", "🌹", "🍎", "🎈", "🍒", "🌶️", "💋"],
     orange: ["🟠", "🧡", "🔥", "🍊", "🥕", "🎃", "🦊", "🏮"],
     yellow: ["🟡", "💛", "⭐", "🌻", "🌼", "⚡", "🌟", "🍯"],
-    green: ["🟢", "💚", "🌿", "🌲", "🌳", "🍀", "🦎", "🦗"],
-    blue: ["🔵", "💙", "🌊", "🫐", "🦋", "🐟", "🧿", "🪐"],
-    violet: ["🟣", "💜", "🪻", "🔮", "👾", "🎀", "🪆"],
-    white: ["⚪", "🤍", "🐑", "👻", "🕊️", "❄️", "💎", "🌸"],
-    pink: ["🩷", "💕", "💖", "🌹", "🦩", "🐷", "🩰", "✨"],
-    black: ["⚫", "🖤", "🐈‍⬛", "🐧", "🎩", "🌑", "🎪", "🖌️"],
+    green: ["🟢", "💚", "🌿", "🌲", "🌳", "🍀", "🥦", "🫛"],
+    blue: ["🔵", "💙", "🌊", "🫐", "🦋", "🐟", "🧿", "🌀"],
+    violet: ["🟣", "💜", "🪻", "🔮", "👾", "🍇", "☂️", "♈"],
+    white: ["⚪", "🤍", "🐑", "👻", "🕊️", "☁️", "🦢", "🥥"],
+    pink: ["🩷", "💕", "💖", "💗", "🦩", "🐷", "🩰", "🌸"],
+    black: ["⚫", "🖤", "🐈‍⬛", "🐦‍⬛", "🎩", "🌑", "♠️", "🕷️"],
   };
   return emojisByColor[emojiColorSelect.value] || emojiSet;
 }
