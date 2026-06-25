@@ -455,6 +455,27 @@ input[type="range"] {
   font-size: 0.9rem;
 }
 
+.community-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-delete {
+  padding: 0.5rem 0.8rem;
+  border: 2px solid #f0a2b2;
+  border-radius: 0.4rem;
+  background: #ffe6ec;
+  color: #8f3a4f;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  background: #ffd7e2;
+  border-color: #e88aa0;
+}
+
 .copy-feedback {
   position: fixed;
   bottom: 2rem;

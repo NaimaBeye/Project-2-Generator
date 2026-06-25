@@ -62,9 +62,19 @@ const emojiSet = ["✨", "🌙", "💫", "🎀", "🌸", "💖", "🫧", "🦋",
 const emoticonSet = [":)", ":D", "XD", "<3", ";)", ":P", "^_^", ":*", "o_o", ":(", "T_T", ":-[", ":O", "o.o", "ಠ_ಠ", "(ノಠ益ಠ)ノ", "(╯°□°)╯︵ ┻━┻", "(´・ω・`)", "(´；ω；`)", "¯\\_(ツ)_/¯", "(≧▽≦)", "(✿◠‿◠)", "(๑•́ ω •̀๑)", "(*´▽`*)", ":3", "(´∀`)♡", "(´；ω；`)", "ฅ(๑*▽*๑)ฅ"];
 
 const favorites = new Set();
-const communityPool = new Set();
+const communityPool = new Map();
 const STORAGE_KEY = "insta_generator_favorites";
 const COMMUNITY_KEY = "insta_generator_community";
+const COMMUNITY_USER_KEY = "insta_generator_user_id";
+const currentUserId = getOrCreateCommunityUserId();
+
+function getOrCreateCommunityUserId() {
+  const existing = localStorage.getItem(COMMUNITY_USER_KEY);
+  if (existing) return existing;
+  const generated = `user_${Math.random().toString(36).slice(2, 10)}`;
+  localStorage.setItem(COMMUNITY_USER_KEY, generated);
+  return generated;
+}
 
 // DOM Elements
 const themeSelect = document.getElementById("theme");
@@ -162,6 +172,33 @@ function enforceExactLength(username, targetLength, bank) {
   }
 
   return value;
+}
+
+function applyCharacterToggles(username) {
+  let value = username;
+
+  if (!includeDotsCheckbox.checked) {
+    value = value.replace(/\./g, "");
+  }
+
+  if (!includeUnderscoresCheckbox.checked) {
+    value = value.replace(/_/g, "");
+  }
+
+  if (!includeNumbersCheckbox.checked) {
+    value = value.replace(/[0-9]/g, "");
+  }
+
+  return value;
+}
+
+function ensureDotWhenEnabled(username) {
+  if (!includeDotsCheckbox.checked) return username;
+  if (username.includes(".")) return username;
+  if (username.length < 2) return username;
+
+  const split = Math.floor(username.length / 2);
+  return `${username.slice(0, split)}.${username.slice(split)}`;
 }
 
 function enforceRequiredTokens(username, tokens, targetLength) {
@@ -305,6 +342,12 @@ function generateUsername() {
 
   // Final guard: include required user terms when provided.
   username = enforceRequiredTokens(username, [coreWord, mediaRef], targetLength);
+
+  // Respect dot/underscore/number toggles even if styles/patterns introduced them.
+  username = applyCharacterToggles(username);
+
+  // When enabled, dot should always be included.
+  username = ensureDotWhenEnabled(username);
 
   // Ensure final output still honors the resolved target length.
   username = enforceExactLength(username, targetLength, bank);
@@ -597,7 +640,7 @@ function loadFontPrefs() {
 }
 
 function saveCommunityPool() {
-  localStorage.setItem(COMMUNITY_KEY, JSON.stringify([...communityPool]));
+  localStorage.setItem(COMMUNITY_KEY, JSON.stringify([...communityPool.values()]));
 }
 
 function loadCommunityPool() {
@@ -605,7 +648,24 @@ function loadCommunityPool() {
     const stored = localStorage.getItem(COMMUNITY_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      parsed.forEach((item) => communityPool.add(item));
+      parsed.forEach((item) => {
+        // Backward compatibility: old pools stored plain strings.
+        if (typeof item === "string") {
+          const username = cleanText(item);
+          if (username) {
+            // Legacy entries created before ownership tracking are treated as local user's entries.
+            communityPool.set(username, { username, ownerId: currentUserId });
+          }
+        } else if (item && typeof item.username === "string") {
+          const username = cleanText(item.username);
+          if (username) {
+            communityPool.set(username, {
+              username,
+              ownerId: typeof item.ownerId === "string" ? item.ownerId : currentUserId,
+            });
+          }
+        }
+      });
     }
   } catch (e) {
     console.error("Error loading community pool:", e);
@@ -615,43 +675,76 @@ function loadCommunityPool() {
 function addToCommunity() {
   const value = communityInput.value.trim();
   if (!value || value.length < 3) return;
-  
-  communityPool.add(cleanText(value));
+
+  const username = cleanText(value);
+  if (!username) return;
+
+  const existing = communityPool.get(username);
+  if (existing && existing.ownerId !== currentUserId) {
+    // Respect ownership: do not overwrite another user's entry.
+    communityInput.value = "";
+    return;
+  }
+
+  communityPool.set(username, { username, ownerId: currentUserId });
   saveCommunityPool();
   renderCommunityPool();
   communityInput.value = "";
 }
 
+function removeFromCommunity(username) {
+  const entry = communityPool.get(username);
+  if (!entry || entry.ownerId !== currentUserId) return;
+  communityPool.delete(username);
+  saveCommunityPool();
+  renderCommunityPool();
+}
+
 function renderCommunityPool() {
   communityPoolEl.innerHTML = "";
-  
+
   if (communityPool.size === 0) {
     communityPoolEl.innerHTML = '<div class="empty-state">No community usernames yet. Add your favorites!</div>';
     return;
   }
-  
-  [...communityPool].forEach((username) => {
+
+  [...communityPool.values()].forEach((entry) => {
+    const username = entry.username;
+    const isOwnEntry = entry.ownerId === currentUserId;
+
     const li = document.createElement("li");
     li.className = "community-item";
-    
+
     const span = document.createElement("span");
     span.textContent = username;
-    
-    const btn = document.createElement("button");
-    btn.className = "btn-copy";
-    btn.textContent = "Copy";
-    btn.addEventListener("click", () => copyToClipboard(username));
-    
+
+    const actions = document.createElement("div");
+    actions.className = "community-actions";
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "btn-copy";
+    copyBtn.textContent = "Copy";
+    copyBtn.addEventListener("click", () => copyToClipboard(username));
+    actions.appendChild(copyBtn);
+
+    if (isOwnEntry) {
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "btn-delete";
+      deleteBtn.textContent = "Delete";
+      deleteBtn.addEventListener("click", () => removeFromCommunity(username));
+      actions.appendChild(deleteBtn);
+    }
+
     li.appendChild(span);
-    li.appendChild(btn);
+    li.appendChild(actions);
     communityPoolEl.appendChild(li);
   });
 }
 
 function exportCommunityPool() {
   if (communityPool.size === 0) return;
-  
-  const data = JSON.stringify([...communityPool], null, 2);
+
+  const data = JSON.stringify([...communityPool.values()].map((entry) => entry.username), null, 2);
   const blob = new Blob([data], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
