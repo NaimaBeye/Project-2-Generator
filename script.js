@@ -1,823 +1,664 @@
-const db = {
-  street: {
-    prefixes: ["callme", "madeby", "wassup", "heyy", "yk", "its", "from", "real"],
-    mids: ["vibe", "drip", "laced", "hollow", "dizzy", "city", "midnight", "ghost"],
-    suffixes: ["mode", "energy", "inside", "daily", "era", "zone", "nights", "files"],
+// Username Generator Data
+const wordbanks = {
+  cool: {
+    prefixes: ["callme", "itsme", "hey", "im", "just", "only", "very", "so", "that", "this", "check", "viral"],
+    mids: ["vibe", "mood", "energy", "wave", "flux", "sync", "pulse", "drift", "flow", "hype", "era", "state"],
+    suffixes: ["era", "mode", "zone", "diary", "core", "soul", "spirit", "realm", "lore", "arc", "era", "culture"],
   },
-  soft: {
-    prefixes: ["petal", "moon", "dotted", "lace", "dear", "pretty", "soft", "little"],
-    mids: ["whisp", "silk", "rose", "cherry", "desire", "faery", "bloom", "mila"],
-    suffixes: ["dream", "aura", "kiss", "mist", "cloud", "garden", "diary", "glow"],
+  aesthetic: {
+    prefixes: ["moon", "star", "petal", "lace", "rose", "silk", "soft", "dear", "pearl", "grace", "ivory", "velvet"],
+    mids: ["dream", "glow", "bloom", "kiss", "whisper", "light", "grace", "aura", "mist", "haze", "dew", "bloom"],
+    suffixes: ["diary", "garden", "cloud", "mist", "fairy", "angel", "heart", "soul", "tale", "spell", "bloom", "essence"],
   },
-  lux: {
-    prefixes: ["velvet", "serene", "noble", "rare", "opal", "gold", "crown", "silk"],
-    mids: ["muse", "allure", "gloss", "femme", "chic", "icon", "luxe", "vogue"],
-    suffixes: ["atelier", "society", "avenue", "gallery", "club", "vault", "house", "studio"],
+  edgy: {
+    prefixes: ["dark", "lost", "hollow", "cold", "mystic", "rebel", "rogue", "strange", "toxic", "void", "midnight", "chaos"],
+    mids: ["night", "shadow", "void", "storm", "flame", "echo", "moan", "daze", "rage", "sin", "curse", "hex"],
+    suffixes: ["core", "soul", "night", "daze", "lair", "void", "haze", "curse", "mark", "bane", "dark", "reign"],
   },
-  dark: {
-    prefixes: ["lostin", "possessed", "faint", "hollow", "ghoul", "midnight", "bones", "nothing"],
-    mids: ["euphoria", "spirits", "mistake", "inside", "mourn", "echo", "shade", "haze"],
-    suffixes: ["core", "daze", "soul", "void", "night", "trace", "being", "eyes"],
+  playful: {
+    prefixes: ["happy", "silly", "funny", "cheeky", "bouncy", "sunny", "quirky", "peppy", "bubbly", "giggle", "jazzy", "perky"],
+    mids: ["buddy", "friend", "love", "joy", "party", "fun", "play", "dance", "laugh", "twirl", "skip", "hop"],
+    suffixes: ["zone", "club", "fest", "party", "hub", "land", "world", "corner", "place", "space", "house", "palace"],
   },
-  dream: {
-    prefixes: ["dearest", "latte", "fairy", "starry", "calm", "lotus", "sugar", "sun"],
-    mids: ["whimsi", "soft", "belle", "seraph", "dawn", "lily", "whisper", "honey"],
-    suffixes: ["bloom", "faery", "heart", "diary", "glow", "light", "moon", "petal"],
+  minimal: {
+    prefixes: ["ali", "ava", "max", "alex", "ana", "leo", "sam", "raw", "kai", "ash", "sky", "zen"],
+    mids: ["tech", "lab", "hub", "co", "net", "dev", "io", "sys", "web", "app", "code", "flow"],
+    suffixes: ["code", "flow", "craft", "work", "space", "hub", "lab", "studio", "works", "studio", "craft", "arts"],
+  },
+  cyberpunk: {
+    prefixes: ["neo", "cyber", "byte", "hack", "neon", "pixel", "digital", "virus", "code", "sync", "glitch", "net"],
+    mids: ["punk", "wave", "tech", "surge", "flux", "pulse", "zone", "grid", "scan", "shock", "drive", "net"],
+    suffixes: ["core", "punk", "ware", "tech", "grid", "sync", "drive", "net", "wave", "force", "code", "sphere"],
+  },
+  cottagecore: {
+    prefixes: ["honey", "wild", "grove", "meadow", "rustic", "garden", "cozy", "willow", "autumn", "spring", "harvest", "field"],
+    mids: ["lane", "path", "bloom", "vine", "leaf", "moss", "rose", "daisy", "wheat", "birch", "oak", "willow"],
+    suffixes: ["cottage", "gate", "barn", "field", "grove", "garden", "hearth", "nest", "folk", "lore", "shire", "haven"],
+  },
+  vintage: {
+    prefixes: ["retro", "classic", "old", "antique", "belle", "dapper", "grand", "victorian", "nostalgia", "timeless", "rare", "precious"],
+    mids: ["tale", "love", "charm", "grace", "spirit", "heart", "soul", "style", "art", "craft", "keeper", "seeker"],
+    suffixes: ["keeper", "soul", "heart", "belle", "lore", "craft", "ware", "post", "shop", "gallery", "studio", "parlor"],
+  },
+  fantasy: {
+    prefixes: ["mystic", "dragon", "elven", "wizard", "fairy", "enchant", "magic", "curse", "spell", "phoenix", "rune", "ancient"],
+    mids: ["realm", "quest", "magic", "curse", "spell", "scroll", "rune", "myth", "lore", "tale", "legend", "saga"],
+    suffixes: ["realm", "quest", "crown", "throne", "tower", "castle", "scroll", "mage", "knight", "sage", "lord", "keeper"],
+  },
+  darkacademia: {
+    prefixes: ["scholar", "library", "ancient", "secret", "old", "oxford", "elite", "noble", "raven", "crimson", "autumn", "twilight"],
+    mids: ["tale", "lore", "wisdom", "spell", "study", "art", "craft", "legacy", "secret", "mystery", "soul", "heart"],
+    suffixes: ["scholar", "keeper", "sage", "master", "elder", "lore", "craft", "keeper", "seeker", "student", "apprentice", "guildhall"],
+  },
+  retro: {
+    prefixes: ["funky", "groovy", "disco", "neon", "retro", "rad", "totally", "bodacious", "tubular", "righteous", "awesome", "gnarly"],
+    mids: ["baby", "daze", "love", "vibes", "spirit", "soul", "mode", "zone", "wave", "groove", "trip", "beat"],
+    suffixes: ["groove", "beat", "zone", "trip", "dial", "studio", "pad", "shack", "club", "disco", "night", "scene"],
   },
 };
 
-const styleRules = {
-  balanced: { compactChance: 0.05, edgyChars: false, cuteTrail: false, futuristicTrail: false },
-  minimal: { compactChance: 0.2, edgyChars: false, cuteTrail: false, futuristicTrail: false },
-  edgy: { compactChance: 0.25, edgyChars: true, cuteTrail: false, futuristicTrail: false },
-  cute: { compactChance: 0.03, edgyChars: false, cuteTrail: true, futuristicTrail: false },
-  futuristic: { compactChance: 0.12, edgyChars: false, cuteTrail: false, futuristicTrail: true },
-};
+const emojiSet = ["✨", "🌙", "💫", "🎀", "🌸", "💖", "🫧", "🦋", "🌟", "💝", "🎵", "🌺", "💕", "🍭", "💎", "🌈", "🔮", "⭐", "💗", "🎀"];
 
-const templates = [
-  "{a}.{b}",
-  "{a}_{b}",
-  "{a}{b}",
-  "{a}{b}{c}",
-  "{media}.{name}",
-  "{name}.{media}",
-  "{media}{name}",
-  "{name}{media}",
-  "{prefix}.{name}",
-  "{name}.{suffix}",
-  "{prefix}{name}",
-  "{name}{suffix}",
-  "{prefix}.{b}",
-  "{a}{joiner}{b}",
-  "{a}{joiner}{c}",
-  "{name}turn",
-  "{name}.jpg",
-];
-
-const connectorWords = ["of", "with", "in", "and", "x"];
-const emojiCollections = {
-  sparkly: ["✨", "💫", "🌟", "🫧", "🎀"],
-  cute: ["🧸", "🍓", "🌸", "🩷", "🫶"],
-  dreamy: ["🌙", "☁️", "🦋", "🌷", "🪐"],
-  hearts: ["💖", "💘", "💌", "💕", "💗"],
-  moody: ["🖤", "🌫️", "🥀", "🌌", "🕯️"],
-};
-const emoticonCollections = {
-  cute: [":3", "^^", "uwu", "xoxo", ">_<"],
-  soft: ["c:", "-.-", "^_^", "(*_*)", "(o_o)"],
-  kawaii: ["(｡◕‿◕｡)", "(˶˃ ᵕ ˂˶)", "(≧◡≦)", "(｡>﹏<｡)", "(づ｡◕‿‿◕｡)づ"],
-  moody: ["._.", "T_T", "-_-", "q_q", ";_;"],
-  retro: [":)", ":(", ":P", ";)", ":D"],
-};
-const businessWords = ["studio", "co", "shop", "brand", "works", "collective", "hq", "official"];
-const personalWords = ["vibes", "diary", "mood", "era", "core", "daily", "world", "archive"];
-const stopWords = new Set([
-  "the",
-  "and",
-  "for",
-  "with",
-  "from",
-  "that",
-  "this",
-  "your",
-  "you",
-  "are",
-  "its",
-  "my",
-  "our",
-  "about",
-  "into",
-  "just",
-  "very",
-]);
-const FONT_STORAGE_KEY = "insta_name_lab_font_prefs_v1";
-const EMOJI_PREFS_KEY = "insta_name_lab_emoji_prefs_v1";
-const fontMap = {
-  space: '"Space Grotesk", sans-serif',
-  quick: '"Quicksand", sans-serif',
-  dm: '"DM Sans", sans-serif',
-  poppins: '"Poppins", sans-serif',
-  sora: '"Sora", sans-serif',
-  nunito: '"Nunito", sans-serif',
-  playfair: '"Playfair Display", serif',
-  cormorant: '"Cormorant Garamond", serif',
-  dancing: '"Dancing Script", cursive',
-  pacifico: '"Pacifico", cursive',
-};
-
-const els = {
-  theme: document.querySelector("#theme"),
-  seed: document.querySelector("#seed"),
-  mediaRef: document.querySelector("#mediaRef"),
-  accountType: document.querySelector("#accountType"),
-  userDescription: document.querySelector("#userDescription"),
-  style: document.querySelector("#style"),
-  length: document.querySelector("#length"),
-  lengthValue: document.querySelector("#lengthValue"),
-  useNumbers: document.querySelector("#useNumbers"),
-  useDots: document.querySelector("#useDots"),
-  useUnderscore: document.querySelector("#useUnderscore"),
-  useEmoji: document.querySelector("#useEmoji"),
-  emojiVibe: document.querySelector("#emojiVibe"),
-  emojiPlacement: document.querySelector("#emojiPlacement"),
-  customEmojis: document.querySelector("#customEmojis"),
-  emojiPreview: document.querySelector("#emojiPreview"),
-  emojiCopyStatus: document.querySelector("#emojiCopyStatus"),
-  emoticonVibe: document.querySelector("#emoticonVibe"),
-  customEmoticons: document.querySelector("#customEmoticons"),
-  emoticonPreview: document.querySelector("#emoticonPreview"),
-  emoticonCopyStatus: document.querySelector("#emoticonCopyStatus"),
-  forceMediaRef: document.querySelector("#forceMediaRef"),
-  allowDoubleWord: document.querySelector("#allowDoubleWord"),
-  avoidTakenStyle: document.querySelector("#avoidTakenStyle"),
-  uiFont: document.querySelector("#uiFont"),
-  resultFont: document.querySelector("#resultFont"),
-  generateBtn: document.querySelector("#generateBtn"),
-  refreshBtn: document.querySelector("#refreshBtn"),
-  results: document.querySelector("#results"),
-  favorites: document.querySelector("#favorites"),
-  communitySingle: document.querySelector("#communitySingle"),
-  addSingleBtn: document.querySelector("#addSingleBtn"),
-  communityBulk: document.querySelector("#communityBulk"),
-  addBulkBtn: document.querySelector("#addBulkBtn"),
-  communityFile: document.querySelector("#communityFile"),
-  exportPoolBtn: document.querySelector("#exportPoolBtn"),
-  poolStats: document.querySelector("#poolStats"),
-  communityPool: document.querySelector("#communityPool"),
-  resultItemTemplate: document.querySelector("#resultItemTemplate"),
-};
+const emoticonSet = [":)", ":D", "XD", "<3", ";)", ":P", "^_^", ":*", "o_o", ":(", "T_T", ":-[", ":O", "o.o", "ಠ_ಠ", "(ノಠ益ಠ)ノ", "(╯°□°)╯︵ ┻━┻", "(´・ω・`)", "(´；ω；`)", "¯\\_(ツ)_/¯", "(≧▽≦)", "(✿◠‿◠)", "(๑•́ ω •̀๑)", "(*´▽`*)", ":3", "(´∀`)♡", "(´；ω；`)", "ฅ(๑*▽*๑)ฅ"];
 
 const favorites = new Set();
-const STORAGE_KEY = "insta_name_lab_pool_v1";
-const communityPool = new Set(loadCommunityPool());
+const communityPool = new Set();
+const STORAGE_KEY = "insta_generator_favorites";
+const COMMUNITY_KEY = "insta_generator_community";
 
-function rand(list) {
-  return list[Math.floor(Math.random() * list.length)];
+// DOM Elements
+const themeSelect = document.getElementById("theme");
+const accountTypeSelect = document.getElementById("accountType");
+const descriptionInput = document.getElementById("description");
+const coreWordInput = document.getElementById("coreWord");
+const mediaRefInput = document.getElementById("mediaRef");
+const styleSelect = document.getElementById("style");
+const lengthInput = document.getElementById("length");
+const lengthValue = document.getElementById("lengthValue");
+const includeNumbersCheckbox = document.getElementById("includeNumbers");
+const includeDotsCheckbox = document.getElementById("includeDots");
+const includeUnderscoresCheckbox = document.getElementById("includeUnderscores");
+const includeEmojiCheckbox = document.getElementById("includeEmoji");
+const includeEmoticonsCheckbox = document.getElementById("includeEmoticons");
+const uiFontSelect = document.getElementById("uiFont");
+const resultFontSelect = document.getElementById("resultFont");
+const emojiColorSelect = document.getElementById("emojiColor");
+const emojiThemeSection = document.getElementById("emojiThemeSection");
+const emojiStudio = document.getElementById("emojiStudio");
+const emojiGrid = document.getElementById("emojiGrid");
+const emoticonGrid = document.getElementById("emoticonGrid");
+const emojiHint = document.getElementById("emojiHint");
+const emoticonHint = document.getElementById("emoticonHint");
+const generateBtn = document.getElementById("generateBtn");
+const refreshBtn = document.getElementById("refreshBtn");
+const copyAllBtn = document.getElementById("copyAllBtn");
+const resultsList = document.getElementById("resultsList");
+const favoritesList = document.getElementById("favoritesList");
+const communityInput = document.getElementById("communityInput");
+const addCommunityBtn = document.getElementById("addCommunityBtn");
+const exportPoolBtn = document.getElementById("exportPoolBtn");
+const communityPoolEl = document.getElementById("communityPool");
+const usernameTemplate = document.getElementById("usernameTemplate");
+
+// Initialize
+document.addEventListener("DOMContentLoaded", () => {
+  loadFontPrefs();
+  loadFavorites();
+  loadCommunityPool();
+  renderFavorites();
+  renderCommunityPool();
+  renderEmojiStudio();
+  applyFonts();
+  generateUsernames();
+
+  lengthInput.addEventListener("input", (e) => {
+    lengthValue.textContent = e.target.value;
+    generateUsernames();
+  });
+
+  uiFontSelect.addEventListener("change", applyFonts);
+  resultFontSelect.addEventListener("change", applyFonts);
+  includeEmojiCheckbox.addEventListener("change", () => {
+    emojiStudio.style.display = includeEmojiCheckbox.checked || includeEmoticonsCheckbox.checked ? "block" : "none";
+    emojiThemeSection.style.display = includeEmojiCheckbox.checked ? "block" : "none";
+    renderEmojiStudio();
+  });
+  includeEmoticonsCheckbox.addEventListener("change", () => {
+    emojiStudio.style.display = includeEmojiCheckbox.checked || includeEmoticonsCheckbox.checked ? "block" : "none";
+    renderEmojiStudio();
+  });
+  emojiColorSelect.addEventListener("change", renderEmojiStudio);
+  addCommunityBtn.addEventListener("click", addToCommunity);
+  exportPoolBtn.addEventListener("click", exportCommunityPool);
+
+  generateBtn.addEventListener("click", generateUsernames);
+  refreshBtn.addEventListener("click", generateUsernames);
+  copyAllBtn.addEventListener("click", copyAllUsernames);
+});
+
+// Utility Functions
+function rand(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function clean(text) {
+function cleanText(text) {
   return text.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-function extractMediaToken(text) {
-  return text
-    .toLowerCase()
-    .split(/[^a-z0-9]+/)
-    .map((part) => clean(part).slice(0, 8))
-    .find((part) => part.length >= 3) || "";
-}
+function enforceExactLength(username, targetLength, bank) {
+  let value = username;
 
-function cleanUsername(text) {
-  return text.toLowerCase().trim().replace(/[^a-z0-9._]/g, "");
-}
-
-function extractEmojis(text) {
-  if (!text) {
-    return [];
-  }
-  return [...text.matchAll(/\p{Extended_Pictographic}/gu)].map((match) => match[0]);
-}
-
-function extractCustomEmoticons(text) {
-  if (!text) {
-    return [];
-  }
-  return text
-    .split(/[\n,]+/)
-    .map((part) => part.trim())
-    .filter((part) => part.length >= 2 && part.length <= 24);
-}
-
-function extractDescriptionTokens(text) {
-  if (!text) {
-    return [];
+  if (value.length > targetLength) {
+    value = value.slice(0, targetLength);
   }
 
-  return text
-    .toLowerCase()
-    .split(/[^a-z0-9]+/)
-    .map((part) => clean(part).slice(0, 10))
-    .filter((part) => part.length >= 3 && !stopWords.has(part));
+  if (value.length < targetLength) {
+    const filler = cleanText(`${rand(bank.mids)}${rand(bank.suffixes)}${rand(bank.prefixes)}`) || "x";
+    let i = 0;
+    while (value.length < targetLength) {
+      value += filler[i % filler.length];
+      i += 1;
+    }
+  }
+
+  return value;
 }
 
-function cleanCommunityName(text) {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "")
-    .replace(/[^a-z0-9._\p{Extended_Pictographic}]/gu, "");
+function enforceRequiredTokens(username, tokens, targetLength) {
+  const required = tokens.filter(Boolean);
+  if (required.length === 0) return username;
+
+  if (required.every((token) => cleanText(username).includes(token))) return username;
+
+  const separator = username.includes(".") ? "." : username.includes("_") ? "_" : "";
+  let rebuilt = username;
+
+  required.forEach((token) => {
+    if (!cleanText(rebuilt).includes(token)) {
+      const plain = cleanText(rebuilt);
+      const split = Math.floor(plain.length / 2);
+      const patterns = [
+        separator ? `${token}${separator}${plain}` : `${token}${plain}`,
+        separator ? `${plain}${separator}${token}` : `${plain}${token}`,
+        separator
+          ? `${plain.slice(0, split)}${separator}${token}${separator}${plain.slice(split)}`
+          : `${plain.slice(0, split)}${token}${plain.slice(split)}`,
+      ];
+      rebuilt = rand(patterns);
+    }
+  });
+
+  // Keep length preference when possible, but never at the cost of dropping required tokens.
+  if (rebuilt.length > targetLength) {
+    const trimmed = rebuilt.slice(0, targetLength);
+    if (required.every((token) => cleanText(trimmed).includes(token))) {
+      rebuilt = trimmed;
+    }
+  }
+
+  return rebuilt;
 }
 
-function sanitizeLineInput(text) {
-  return text
-    .split(/\r?\n|,/) 
-    .map((line) => cleanCommunityName(line))
-    .filter((line) => line.length >= 3 && line.length <= 30);
+function generateUsername() {
+  const theme = themeSelect.value;
+  const coreWord = cleanText(coreWordInput.value).slice(0, 12);
+  const mediaRef = cleanText(mediaRefInput.value).slice(0, 12);
+  const style = styleSelect.value;
+  const requestedLength = parseInt(lengthInput.value, 10);
+  const targetLength = Math.max(3, requestedLength);
+  const bank = wordbanks[theme];
+
+  let username = "";
+
+  if (coreWord && mediaRef) {
+    const prefix = rand(bank.prefixes);
+    const mid = rand(bank.mids);
+    const suffix = rand(bank.suffixes);
+    const patterns = [
+      `${mediaRef}.${coreWord}${suffix}`,
+      `${coreWord}_${mediaRef}`,
+      `${prefix}${mediaRef}${suffix}`,
+      `${mid}.${mediaRef}.${coreWord}`,
+      `${coreWord}${mid}${mediaRef}`,
+      `${mediaRef}${mid}${coreWord}`,
+    ];
+    username = rand(patterns);
+  } else if (coreWord) {
+    // Use core word as base
+    const prefix = rand(bank.prefixes);
+    const suffix = rand(bank.suffixes);
+    const patterns = [
+      `${prefix}.${coreWord}`,
+      `${coreWord}${suffix}`,
+      `${coreWord}_${rand(bank.mids)}`,
+      `${prefix}${coreWord}`,
+    ];
+    username = rand(patterns);
+  } else if (mediaRef) {
+    // Use media reference in varied positions
+    const prefix = rand(bank.prefixes);
+    const mid = rand(bank.mids);
+    const suffix = rand(bank.suffixes);
+    const patterns = [
+      `${mediaRef}${suffix}`,
+      `${prefix}${mediaRef}`,
+      `${mid}.${mediaRef}`,
+      `${mediaRef}_${mid}`,
+      `${suffix}${mediaRef}`,
+      `${mid}${mediaRef}${suffix}`,
+    ];
+    username = rand(patterns);
+  } else {
+    // Random generation
+    const prefix = rand(bank.prefixes);
+    const mid = rand(bank.mids);
+    const suffix = rand(bank.suffixes);
+
+    const patterns = [
+      `${prefix}${mid}`,
+      `${mid}.${suffix}`,
+      `${prefix}_${suffix}`,
+      `${mid}${suffix}`,
+    ];
+    username = rand(patterns);
+  }
+
+  // Apply style modifications
+  username = applyStyle(username, style);
+
+  // Add separators (but not if already has them from style)
+  if (!username.includes(".") && !username.includes("_")) {
+    if (includeDotsCheckbox.checked && Math.random() > 0.5 && username.length > 5) {
+      const splitPoint = Math.floor(username.length / 2);
+      username = `${username.slice(0, splitPoint)}.${username.slice(splitPoint)}`;
+    } else if (includeUnderscoresCheckbox.checked && Math.random() > 0.5 && username.length > 5) {
+      const splitPoint = Math.floor(username.length / 2);
+      username = `${username.slice(0, splitPoint)}_${username.slice(splitPoint)}`;
+    }
+  }
+
+  // Add numbers
+  if (includeNumbersCheckbox.checked && Math.random() > 0.4) {
+    username += rand([7, 8, 9, 13, 24, 99, 2023, 2024]);
+  }
+
+  // Add emoji
+  if (includeEmojiCheckbox.checked && Math.random() > 0.6) {
+    username += rand(emojiSet);
+  }
+
+  // Add emoticons
+  if (includeEmoticonsCheckbox.checked && Math.random() > 0.6) {
+    username += rand(emoticonSet);
+  }
+
+  // Normalize length
+  if (username.length > targetLength) {
+    username = username.slice(0, targetLength);
+  }
+
+  // Remove invalid characters (except emoji)
+  username = username.replace(/[^a-z0-9._]/g, (match) => {
+    if (emojiSet.includes(match)) return match;
+    return "";
+  });
+
+  // Final guard: include required user terms when provided.
+  username = enforceRequiredTokens(username, [coreWord, mediaRef], targetLength);
+
+  // Ensure final output still honors the resolved target length.
+  username = enforceExactLength(username, targetLength, bank);
+
+  return username.length >= 3 ? username : generateUsername();
+}
+
+function applyStyle(username, style) {
+  switch (style) {
+    case "minimalist":
+      // Keep it simple and short - no extra modifications
+      return username.length > 10 ? username.slice(0, 10) : username;
+    case "elegant":
+      // Add a separator for elegant look
+      if (username.length > 6 && !username.includes(".") && !username.includes("_")) {
+        const split = Math.floor(username.length / 2);
+        return `${username.slice(0, split)}.${username.slice(split)}`;
+      }
+      return username;
+    case "playful":
+      // Double a random consonant for playful vibe
+      const consonants = username.match(/[bcdfghjklmnpqrstvwxyz]/gi) || [];
+      if (consonants.length > 0) {
+        const randomConsonant = consonants[Math.floor(Math.random() * consonants.length)];
+        const index = username.indexOf(randomConsonant);
+        if (index !== -1) {
+          return username.slice(0, index + 1) + randomConsonant + username.slice(index + 1);
+        }
+      }
+      return username;
+    case "cosmic":
+      // Add cosmic sparkle with asterisks
+      const splitCosmic = Math.floor(username.length / 2);
+      return `✨${username.slice(0, splitCosmic)}✨${username.slice(splitCosmic)}`;
+    case "dreamy":
+      // Add soft separator with tildes
+      if (username.length > 5) {
+        const splitDreamy = Math.floor(username.length / 2);
+        return `${username.slice(0, splitDreamy)}~${username.slice(splitDreamy)}`;
+      }
+      return username;
+    case "edgy":
+      // Make it edgy with dashes and alternating caps
+      let edgyUsername = "";
+      for (let i = 0; i < username.length; i++) {
+        edgyUsername += i % 2 === 0 ? username[i].toUpperCase() : username[i].toLowerCase();
+      }
+      return edgyUsername;
+    case "aesthetic":
+      // Capitalize first letters for aesthetic appeal
+      return username
+        .split(/(?=[A-Z])|[._\-]/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join("");
+    case "balanced":
+    default:
+      return username;
+  }
+}
+
+function generateUsernames() {
+  const usernames = new Set();
+  const maxAttempts = 200;
+  let attempts = 0;
+
+  while (usernames.size < 12 && attempts < maxAttempts) {
+    const username = generateUsername();
+    usernames.add(username);
+    attempts++;
+  }
+
+  renderResults([...usernames]);
+}
+
+function copyAllUsernames() {
+  const allUsernames = Array.from(resultsList.querySelectorAll(".username-text"))
+    .map(el => el.textContent)
+    .join("\n");
+  
+  if (allUsernames.length === 0) {
+    showCopyFeedback("No usernames to copy!");
+    return;
+  }
+  
+  copyToClipboard(allUsernames);
+  showCopyFeedback("All usernames copied!");
+}
+
+function renderResults(usernames) {
+  resultsList.innerHTML = "";
+
+  usernames.forEach((username) => {
+    const clone = usernameTemplate.content.cloneNode(true);
+    const usernameText = clone.querySelector(".username-text");
+    const copyBtn = clone.querySelector(".btn-copy");
+    const favoriteBtn = clone.querySelector(".btn-favorite");
+
+    usernameText.textContent = username;
+
+    copyBtn.addEventListener("click", () => {
+      copyToClipboard(username);
+    });
+
+    favoriteBtn.addEventListener("click", () => {
+      toggleFavorite(username, favoriteBtn);
+    });
+
+    // Update favorite button state
+    if (favorites.has(username)) {
+      favoriteBtn.classList.add("saved");
+      favoriteBtn.textContent = "♥";
+    }
+
+    resultsList.appendChild(clone);
+  });
+}
+
+function renderFavorites() {
+  favoritesList.innerHTML = "";
+
+  if (favorites.size === 0) {
+    favoritesList.innerHTML = '<div class="empty-state">No favorites yet. Click ♡ to save usernames!</div>';
+    return;
+  }
+
+  favorites.forEach((username) => {
+    const li = document.createElement("li");
+    li.className = "favorite-item";
+
+    const span = document.createElement("span");
+    span.className = "favorite-text";
+    span.textContent = username;
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "btn-copy";
+    copyBtn.textContent = "Copy";
+    copyBtn.addEventListener("click", () => {
+      copyToClipboard(username);
+    });
+
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "btn-favorite saved";
+    removeBtn.textContent = "✕";
+    removeBtn.addEventListener("click", () => {
+      removeFavorite(username);
+    });
+
+    li.appendChild(span);
+    li.appendChild(copyBtn);
+    li.appendChild(removeBtn);
+    favoritesList.appendChild(li);
+  });
+}
+
+function toggleFavorite(username, btn) {
+  if (favorites.has(username)) {
+    favorites.delete(username);
+    btn.classList.remove("saved");
+    btn.textContent = "♡";
+  } else {
+    favorites.add(username);
+    btn.classList.add("saved");
+    btn.textContent = "♥";
+    renderFavorites();
+  }
+  saveFavorites();
+}
+
+function removeFavorite(username) {
+  favorites.delete(username);
+  saveFavorites();
+  renderFavorites();
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    showCopyFeedback();
+  });
+}
+
+function showCopyFeedback(message = "Copied to clipboard!") {
+  const feedback = document.createElement("div");
+  feedback.className = "copy-feedback";
+  feedback.textContent = message;
+  document.body.appendChild(feedback);
+
+  setTimeout(() => {
+    feedback.remove();
+  }, 2000);
+}
+
+function saveFavorites() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...favorites]));
+}
+
+function loadFavorites() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      parsed.forEach((fav) => favorites.add(fav));
+    }
+  } catch (e) {
+    console.error("Error loading favorites:", e);
+  }
+}
+
+function getFilteredEmojis() {
+  const emojisByColor = {
+    all: emojiSet,
+    red: ["❤️", "🔴", "🌹", "🍎", "🎈", "🍒", "🌶️", "💋"],
+    orange: ["🟠", "🧡", "🔥", "🍊", "🥕", "🎃", "🦊", "🏮"],
+    yellow: ["🟡", "💛", "⭐", "🌻", "🌼", "⚡", "🌟", "🍯"],
+    green: ["🟢", "💚", "🌿", "🌲", "🌳", "🍀", "🥦", "🫛"],
+    blue: ["🔵", "💙", "🌊", "🫐", "🦋", "🐟", "🧿", "🌀"],
+    violet: ["🟣", "💜", "🪻", "🔮", "👾", "🍇", "☂️", "♈"],
+    white: ["⚪", "🤍", "🐑", "👻", "🕊️", "☁️", "🦢", "🥥"],
+    pink: ["🩷", "💕", "💖", "💗", "🦩", "🐷", "🩰", "🌸"],
+    black: ["⚫", "🖤", "🐈‍⬛", "🐦‍⬛", "🎩", "🌑", "♠️", "🕷️"],
+  };
+  return emojisByColor[emojiColorSelect.value] || emojiSet;
+}
+
+function renderEmojiStudio() {
+  // Only show emojis if includeEmoji is checked
+  emojiHint.style.display = includeEmojiCheckbox.checked ? "block" : "none";
+  emojiGrid.innerHTML = "";
+  if (includeEmojiCheckbox.checked) {
+    const filteredEmojis = getFilteredEmojis();
+    filteredEmojis.forEach((emoji) => {
+      const btn = document.createElement("button");
+      btn.className = "emoji-btn";
+      btn.textContent = emoji;
+      btn.addEventListener("click", () => {
+        copyToClipboard(emoji);
+      });
+      emojiGrid.appendChild(btn);
+    });
+  }
+
+  // Only show emoticons if includeEmoticons is checked
+  emoticonHint.style.display = includeEmoticonsCheckbox.checked ? "block" : "none";
+  emoticonGrid.innerHTML = "";
+  if (includeEmoticonsCheckbox.checked) {
+    emoticonSet.forEach((emoticon) => {
+      const btn = document.createElement("button");
+      btn.className = "emoticon-btn";
+      btn.textContent = emoticon;
+      btn.addEventListener("click", () => {
+        copyToClipboard(emoticon);
+      });
+      emoticonGrid.appendChild(btn);
+    });
+  }
+
+  emojiStudio.style.display = includeEmojiCheckbox.checked || includeEmoticonsCheckbox.checked ? "block" : "none";
+}
+
+function applyFonts() {
+  const uiFont = uiFontSelect.value;
+  const resultFont = resultFontSelect.value;
+  
+  const fontMap = {
+    poppins: '"Poppins", sans-serif',
+    quicksand: '"Quicksand", sans-serif',
+    dmsans: '"DM Sans", sans-serif',
+    playfair: '"Playfair Display", serif',
+    dancing: '"Dancing Script", cursive',
+    pacifico: '"Pacifico", cursive',
+    nunito: '"Nunito", sans-serif',
+    montserrat: '"Montserrat", sans-serif',
+    fredoka: '"Fredoka", sans-serif',
+    caveat: '"Caveat", cursive',
+    righteous: '"Righteous", sans-serif',
+    spacemono: '"Space Mono", monospace',
+    abril: '"Abril Fatface", cursive',
+    indie: '"Indie Flower", cursive',
+  };
+  
+  document.documentElement.style.setProperty("--ui-font", fontMap[uiFont] || fontMap.poppins);
+  document.documentElement.style.setProperty("--result-font", fontMap[resultFont] || fontMap.poppins);
+  
+  localStorage.setItem("font_prefs", JSON.stringify({ uiFont, resultFont }));
+}
+
+function loadFontPrefs() {
+  const prefs = JSON.parse(localStorage.getItem("font_prefs") || '{}');
+  if (prefs.uiFont) uiFontSelect.value = prefs.uiFont;
+  if (prefs.resultFont) resultFontSelect.value = prefs.resultFont;
+}
+
+function saveCommunityPool() {
+  localStorage.setItem(COMMUNITY_KEY, JSON.stringify([...communityPool]));
 }
 
 function loadCommunityPool() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return [];
+    const stored = localStorage.getItem(COMMUNITY_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      parsed.forEach((item) => communityPool.add(item));
     }
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-    return parsed.map((item) => cleanCommunityName(String(item))).filter(Boolean);
-  } catch {
-    return [];
+  } catch (e) {
+    console.error("Error loading community pool:", e);
   }
 }
 
-function saveCommunityPool() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...communityPool]));
+function addToCommunity() {
+  const value = communityInput.value.trim();
+  if (!value || value.length < 3) return;
+  
+  communityPool.add(cleanText(value));
+  saveCommunityPool();
+  renderCommunityPool();
+  communityInput.value = "";
 }
 
-function maybeCompact(base, chance) {
-  if (Math.random() > chance) {
-    return base;
-  }
-  return base
-    .replace(/[aeiou](?=[a-z]{3,})/g, "")
-    .replace(/(.)\1+/g, "$1")
-    .slice(0, 14);
-}
-
-function maybeAddEdge(word, style) {
-  if (!style.edgyChars) {
-    return word;
-  }
-  const swaps = [
-    ["s", "z"],
-    ["x", "xx"],
-    ["k", "q"],
-  ];
-  let next = word;
-  for (const [from, to] of swaps) {
-    if (next.includes(from) && Math.random() < 0.22) {
-      next = next.replace(from, to);
-    }
-  }
-  return next;
-}
-
-function maybeAddStyleTail(word, style) {
-  if (style.cuteTrail && Math.random() < 0.35) {
-    return `${word}${rand(["ie", "y", "pop", "bun"])}`;
-  }
-  if (style.futuristicTrail && Math.random() < 0.35) {
-    return `${word}${rand(["x", "io", "vr", "9"])}`;
-  }
-  return word;
-}
-
-function maybeSeparator() {
-  return rand([".", "_"]);
-}
-
-function buildFromTemplate(parts, seed, mediaToken) {
-  const template = rand(templates);
-  const name = seed || rand(parts.mids);
-  const tokens = {
-    a: rand(parts.prefixes),
-    b: rand(parts.mids),
-    c: rand(parts.suffixes),
-    joiner: rand(["of", "with", "x"]),
-    prefix: rand(["callme", "heyy", "not", "madeby", "dear", "wbu", "yk"]),
-    suffix: rand(["archive", "jpg", "diary", "era", "club", "vibe", "mode", "files"]),
-    media: mediaToken || rand(parts.mids),
-    name,
-  };
-
-  return template.replace(/\{(\w+)\}/g, (_, key) => tokens[key] || "");
-}
-
-function buildBase(theme, seed, allowDoubleWord, mediaToken) {
-  const parts = db[theme];
-  const base = buildFromTemplate(parts, seed, mediaToken);
-
-  if (!allowDoubleWord && (base.includes(".") || base.includes("_"))) {
-    return base.replace(/[._]/g, "");
-  }
-
-  if (allowDoubleWord && Math.random() < 0.22) {
-    return `${base}${rand(connectorWords)}${rand(parts.mids)}`;
-  }
-
-  return base;
-}
-
-function resolveSeparatorMode() {
-  const allowDots = els.useDots.checked;
-  const allowUnderscore = els.useUnderscore.checked;
-
-  if (allowDots && allowUnderscore) {
-    return rand([".", "_"]);
-  }
-  if (allowDots) {
-    return ".";
-  }
-  if (allowUnderscore) {
-    return "_";
-  }
-  return "";
-}
-
-function maybeRemixCommunity(name) {
-  if (!communityPool.size || Math.random() > 0.4) {
-    return name;
-  }
-  const pick = rand([...communityPool]);
-  const base = pick.replace(/[^a-z0-9]/g, "");
-  if (!base) {
-    return name;
-  }
-  return Math.random() < 0.5 ? `${name}${base.slice(0, 4)}` : `${base.slice(0, 5)}${name}`;
-}
-
-function normalizeLength(name, target) {
-  if (name.length > target) {
-    return name.slice(0, target);
-  }
-  return name;
-}
-
-function enforceRequiredToken(name, rawToken, separatorChoice, target) {
-  if (!rawToken) {
-    return name;
-  }
-
-  const minStem = Math.min(3, target);
-  const stemMax = Math.max(minStem, target - 2);
-  const token = clean(rawToken).slice(0, Math.min(8, stemMax));
-  if (!token) {
-    return name;
-  }
-
-  if (name.includes(token)) {
-    return name;
-  }
-
-  const joiner = separatorChoice || "";
-  const availableTail = Math.max(0, target - token.length - (joiner ? 1 : 0));
-  const tail = name.replace(/[._]/g, "").slice(0, availableTail);
-  return `${token}${joiner}${tail}`;
-}
-
-function loadFontPrefs() {
-  try {
-    const raw = localStorage.getItem(FONT_STORAGE_KEY);
-    if (!raw) {
-      return;
-    }
-    const parsed = JSON.parse(raw);
-    if (parsed.uiFont && fontMap[parsed.uiFont]) {
-      els.uiFont.value = parsed.uiFont;
-    }
-    if (parsed.resultFont && fontMap[parsed.resultFont]) {
-      els.resultFont.value = parsed.resultFont;
-    }
-  } catch {
-    // Ignore invalid saved values.
-  }
-}
-
-function applyFontPrefs() {
-  const uiFont = fontMap[els.uiFont.value] || fontMap.space;
-  const resultFont = fontMap[els.resultFont.value] || fontMap.dancing;
-  document.documentElement.style.setProperty("--ui-font", uiFont);
-  document.documentElement.style.setProperty("--result-font", resultFont);
-  localStorage.setItem(
-    FONT_STORAGE_KEY,
-    JSON.stringify({ uiFont: els.uiFont.value, resultFont: els.resultFont.value })
-  );
-}
-
-function getActiveEmojiPool() {
-  const selectedVibe = emojiCollections[els.emojiVibe.value] || emojiCollections.sparkly;
-  const custom = extractEmojis(els.customEmojis.value);
-  return [...new Set([...selectedVibe, ...custom])];
-}
-
-function getActiveEmoticonPool() {
-  const selectedVibe = emoticonCollections[els.emoticonVibe.value] || emoticonCollections.cute;
-  const custom = extractCustomEmoticons(els.customEmoticons.value);
-  return [...new Set([...selectedVibe, ...custom])];
-}
-
-function renderEmojiPreview() {
-  const pool = getActiveEmojiPool();
-  els.emojiPreview.innerHTML = "";
-  els.emojiCopyStatus.textContent = "";
-
-  for (const emoji of pool.slice(0, 12)) {
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = "emoji-chip";
-    chip.textContent = emoji;
-    chip.title = `Copy ${emoji}`;
-    chip.addEventListener("click", async () => {
-      await copyToClipboard(emoji);
-      chip.classList.add("copied");
-      els.emojiCopyStatus.textContent = `${emoji} copied`;
-      setTimeout(() => {
-        chip.classList.remove("copied");
-      }, 700);
-    });
-    els.emojiPreview.append(chip);
-  }
-}
-
-function renderEmoticonPreview() {
-  const pool = getActiveEmoticonPool();
-  els.emoticonPreview.innerHTML = "";
-  els.emoticonCopyStatus.textContent = "";
-
-  for (const emoticon of pool.slice(0, 12)) {
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = "emoticon-chip";
-    chip.textContent = emoticon;
-    chip.title = `Copy ${emoticon}`;
-    chip.addEventListener("click", async () => {
-      await copyToClipboard(emoticon);
-      chip.classList.add("copied");
-      els.emoticonCopyStatus.textContent = `${emoticon} copied`;
-      setTimeout(() => {
-        chip.classList.remove("copied");
-      }, 700);
-    });
-    els.emoticonPreview.append(chip);
-  }
-}
-
-function saveEmojiPrefs() {
-  localStorage.setItem(
-    EMOJI_PREFS_KEY,
-    JSON.stringify({
-      vibe: els.emojiVibe.value,
-      placement: els.emojiPlacement.value,
-      custom: els.customEmojis.value,
-      emoticonVibe: els.emoticonVibe.value,
-      customEmoticons: els.customEmoticons.value,
-    })
-  );
-}
-
-function loadEmojiPrefs() {
-  try {
-    const raw = localStorage.getItem(EMOJI_PREFS_KEY);
-    if (!raw) {
-      return;
-    }
-    const parsed = JSON.parse(raw);
-    if (parsed.vibe && emojiCollections[parsed.vibe]) {
-      els.emojiVibe.value = parsed.vibe;
-    }
-    if (parsed.placement && ["end", "both", "random"].includes(parsed.placement)) {
-      els.emojiPlacement.value = parsed.placement;
-    }
-    if (typeof parsed.custom === "string") {
-      els.customEmojis.value = parsed.custom;
-    }
-    if (parsed.emoticonVibe && emoticonCollections[parsed.emoticonVibe]) {
-      els.emoticonVibe.value = parsed.emoticonVibe;
-    }
-    if (typeof parsed.customEmoticons === "string") {
-      els.customEmoticons.value = parsed.customEmoticons;
-    }
-  } catch {
-    // Ignore invalid saved values.
-  }
-}
-
-function applyEmojiToHandle(handle) {
-  if (!els.useEmoji.checked) {
-    return handle;
-  }
-
-  const pool = getActiveEmojiPool();
-  if (!pool.length) {
-    return handle;
-  }
-
-  const first = rand(pool);
-  const second = rand(pool);
-  const placement = els.emojiPlacement.value;
-
-  if (placement === "both") {
-    return `${first}${handle}${second}`;
-  }
-  if (placement === "random") {
-    return Math.random() < 0.5 ? `${first}${handle}` : `${handle}${first}`;
-  }
-  return `${handle}${first}`;
-}
-
-function applyEmoticonToHandle(handle) {
-  const pool = getActiveEmoticonPool();
-  if (!pool.length) {
-    return handle;
-  }
-
-  const first = rand(pool);
-  const second = rand(pool);
-  const placement = els.emojiPlacement.value;
-
-  if (placement === "both") {
-    return `${first}${handle}${second}`;
-  }
-  if (placement === "random") {
-    return Math.random() < 0.5 ? `${first}${handle}` : `${handle}${first}`;
-  }
-  return `${handle}${first}`;
-}
-
-function applyAccountProfile(name, accountType, descriptionToken, separatorChoice) {
-  const sep = separatorChoice || "";
-
-  if (accountType === "business") {
-    const brandWord = descriptionToken || rand(businessWords);
-    const patterns = [
-      `${brandWord}${sep}${name}`,
-      `${name}${sep}${brandWord}`,
-      `${name}${sep}${rand(["official", "studio", "co", "shop"])}`,
-    ];
-    return rand(patterns).replace(/[._]{2,}/g, sep || "");
-  }
-
-  const personalWord = descriptionToken || rand(personalWords);
-  const patterns = [
-    `${name}${sep}${personalWord}`,
-    `${rand(["its", "hey", "im", "just"]) }${sep}${name}`,
-    `${personalWord}${sep}${name}`,
-  ];
-  return rand(patterns).replace(/[._]{2,}/g, sep || "");
-}
-
-function generateOne() {
-  const theme = els.theme.value;
-  const seed = clean(els.seed.value.trim()).slice(0, 8);
-  const mediaToken = extractMediaToken(els.mediaRef.value.trim());
-  const accountType = els.accountType.value;
-  const descriptionTokens = extractDescriptionTokens(els.userDescription.value.trim());
-  const descriptionToken = descriptionTokens[0] || "";
-  const style = styleRules[els.style.value];
-  const targetLength = Number(els.length.value);
-
-  let name = buildBase(theme, seed, els.allowDoubleWord.checked, mediaToken).toLowerCase();
-  name = maybeRemixCommunity(name);
-
-  const separatorChoice = resolveSeparatorMode();
-  if (!separatorChoice) {
-    name = name.replace(/[._]/g, "");
-  } else {
-    name = name.replace(/[._]/g, separatorChoice);
-  }
-
-  name = applyAccountProfile(name, accountType, descriptionToken, separatorChoice);
-
-  name = name.replace(/[^a-z0-9._]/g, "");
-  name = maybeCompact(name, style.compactChance);
-  name = maybeAddEdge(name, style);
-  name = maybeAddStyleTail(name, style);
-
-  if (separatorChoice && name.length > 6 && !/[._]/.test(name) && Math.random() < 0.5) {
-    const split = Math.max(3, Math.min(name.length - 3, Math.floor(name.length / 2)));
-    name = `${name.slice(0, split)}${separatorChoice}${name.slice(split)}`;
-  }
-
-  if (els.useNumbers.checked && Math.random() < 0.45) {
-    name += String(rand([7, 8, 9, 10, 11, 13, 17, 21, 24, 27]));
-  }
-
-  if (els.avoidTakenStyle.checked && Math.random() < 0.55) {
-    name += rand(["core", "era", "files", "diary", "page", "room", "hq"]);
-  }
-
-  name = normalizeLength(name, targetLength);
-  if (els.forceMediaRef.checked && mediaToken) {
-    name = enforceRequiredToken(name, mediaToken, separatorChoice, targetLength);
-  }
-  if (seed) {
-    name = enforceRequiredToken(name, seed, separatorChoice, targetLength);
-  }
-  if (descriptionToken) {
-    name = enforceRequiredToken(name, descriptionToken, separatorChoice, targetLength);
-  }
-
-  const baseHandle = cleanUsername(name);
-  if (!baseHandle) {
-    return "vibe.room";
-  }
-
-  if (els.useEmoji.checked && Math.random() < 0.55) {
-    return Math.random() < 0.65 ? applyEmojiToHandle(baseHandle) : applyEmoticonToHandle(baseHandle);
-  }
-
-  return baseHandle;
-}
-
-function generateBatch(count = 12) {
-  const names = new Set();
-  let safety = 0;
-
-  while (names.size < count && safety < 500) {
-    names.add(generateOne());
-    safety += 1;
-  }
-
-  return [...names];
-}
-
-function writeFavorites() {
-  els.favorites.innerHTML = "";
-
-  if (!favorites.size) {
-    const li = document.createElement("li");
-    li.className = "empty";
-    li.textContent = "No favorites yet.";
-    els.favorites.append(li);
+function renderCommunityPool() {
+  communityPoolEl.innerHTML = "";
+  
+  if (communityPool.size === 0) {
+    communityPoolEl.innerHTML = '<div class="empty-state">No community usernames yet. Add your favorites!</div>';
     return;
   }
-
-  for (const username of favorites) {
+  
+  [...communityPool].forEach((username) => {
     const li = document.createElement("li");
-    li.className = "favorite-item";
-    li.innerHTML = `<span>${username}</span><button class="copy">Copy</button>`;
-    li.querySelector("button").addEventListener("click", () => copyToClipboard(username));
-    els.favorites.append(li);
-  }
-}
-
-function writeCommunityPool() {
-  els.communityPool.innerHTML = "";
-  const pool = [...communityPool];
-  els.poolStats.textContent = `${pool.length} usernames available in community pool.`;
-
-  if (!pool.length) {
-    const li = document.createElement("li");
-    li.className = "empty";
-    li.textContent = "No community usernames yet. Add some above.";
-    els.communityPool.append(li);
-    return;
-  }
-
-  for (const username of pool.slice(0, 60)) {
-    const li = document.createElement("li");
-    li.className = "favorite-item";
-    li.innerHTML = `<span>${username}</span><button class="copy">Copy</button>`;
-    li.querySelector("button").addEventListener("click", () => copyToClipboard(username));
-    els.communityPool.append(li);
-  }
-}
-
-function addUsernamesToPool(list) {
-  let added = 0;
-  for (const item of list) {
-    if (!item) {
-      continue;
-    }
-    if (!communityPool.has(item)) {
-      communityPool.add(item);
-      added += 1;
-    }
-  }
-  if (added) {
-    saveCommunityPool();
-    writeCommunityPool();
-  }
-}
-
-async function copyToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    const tmp = document.createElement("textarea");
-    tmp.value = text;
-    document.body.append(tmp);
-    tmp.select();
-    document.execCommand("copy");
-    tmp.remove();
-  }
-}
-
-function renderResults() {
-  const batch = generateBatch(12);
-  els.results.innerHTML = "";
-
-  for (const username of batch) {
-    const fragment = els.resultItemTemplate.content.cloneNode(true);
-    const userEl = fragment.querySelector(".username");
-    const copyBtn = fragment.querySelector(".copy");
-    const saveBtn = fragment.querySelector(".save");
-
-    userEl.textContent = username;
-
-    copyBtn.addEventListener("click", async () => {
-      await copyToClipboard(username);
-      copyBtn.textContent = "Copied";
-      setTimeout(() => {
-        copyBtn.textContent = "Copy";
-      }, 850);
-    });
-
-    saveBtn.addEventListener("click", () => {
-      if (favorites.has(username)) {
-        favorites.delete(username);
-        saveBtn.textContent = "☆";
-      } else {
-        favorites.add(username);
-        saveBtn.textContent = "★";
-      }
-      writeFavorites();
-    });
-
-    els.results.append(fragment);
-  }
-}
-
-els.length.addEventListener("input", () => {
-  els.lengthValue.textContent = els.length.value;
-});
-
-function handleEmojiSettingsChange() {
-  renderEmojiPreview();
-  renderEmoticonPreview();
-  saveEmojiPrefs();
-}
-
-els.uiFont.addEventListener("change", applyFontPrefs);
-els.resultFont.addEventListener("change", applyFontPrefs);
-els.emojiVibe.addEventListener("change", handleEmojiSettingsChange);
-els.emojiPlacement.addEventListener("change", handleEmojiSettingsChange);
-els.customEmojis.addEventListener("input", handleEmojiSettingsChange);
-els.emoticonVibe.addEventListener("change", handleEmojiSettingsChange);
-els.customEmoticons.addEventListener("input", handleEmojiSettingsChange);
-
-els.addSingleBtn.addEventListener("click", () => {
-  const value = cleanCommunityName(els.communitySingle.value);
-  if (!value) {
-    return;
-  }
-  addUsernamesToPool([value]);
-  els.communitySingle.value = "";
-});
-
-els.addBulkBtn.addEventListener("click", () => {
-  const list = sanitizeLineInput(els.communityBulk.value);
-  addUsernamesToPool(list);
-  els.communityBulk.value = "";
-});
-
-els.communityFile.addEventListener("change", async (event) => {
-  const file = event.target.files?.[0];
-  if (!file) {
-    return;
-  }
-
-  const text = await file.text();
-  let list = [];
-
-  if (file.name.toLowerCase().endsWith(".json")) {
-    try {
-      const parsed = JSON.parse(text);
-      if (Array.isArray(parsed)) {
-        list = parsed.map((item) => cleanCommunityName(String(item))).filter(Boolean);
-      }
-    } catch {
-      list = [];
-    }
-  } else {
-    list = sanitizeLineInput(text);
-  }
-
-  addUsernamesToPool(list);
-  event.target.value = "";
-});
-
-els.exportPoolBtn.addEventListener("click", () => {
-  const blob = new Blob([JSON.stringify([...communityPool], null, 2)], {
-    type: "application/json",
+    li.className = "community-item";
+    
+    const span = document.createElement("span");
+    span.textContent = username;
+    
+    const btn = document.createElement("button");
+    btn.className = "btn-copy";
+    btn.textContent = "Copy";
+    btn.addEventListener("click", () => copyToClipboard(username));
+    
+    li.appendChild(span);
+    li.appendChild(btn);
+    communityPoolEl.appendChild(li);
   });
+}
+
+function exportCommunityPool() {
+  if (communityPool.size === 0) return;
+  
+  const data = JSON.stringify([...communityPool], null, 2);
+  const blob = new Blob([data], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "insta-name-community-pool.json";
+  a.download = "insta-community-pool.json";
   a.click();
   URL.revokeObjectURL(url);
-});
+}
 
-els.generateBtn.addEventListener("click", renderResults);
-els.refreshBtn.addEventListener("click", renderResults);
 
-loadFontPrefs();
-applyFontPrefs();
-loadEmojiPrefs();
-renderEmojiPreview();
-renderEmoticonPreview();
-writeFavorites();
-writeCommunityPool();
-renderResults();

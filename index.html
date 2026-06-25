@@ -1,256 +1,234 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Insta Name Lab</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Cormorant+Garamond:wght@500;700&family=Dancing+Script:wght@500;700&family=DM+Sans:wght@400;500;700&family=Nunito:wght@400;600;700&family=Pacifico&family=Playfair+Display:wght@500;700&family=Poppins:wght@400;500;700&family=Quicksand:wght@400;500;700&family=Sora:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="bg-orb orb-one"></div>
-    <div class="bg-orb orb-two"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InstaName Lab - Username Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@600;700&family=Pacifico&family=DM+Sans:wght@400;600;700&family=Nunito:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Fredoka:wght@400;600;700&family=Caveat:wght@400;700&family=Rubik+Mono+One&family=Abril+Fatface&family=Righteous&family=Space+Mono:wght@400;700&family=Indie+Flower&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css?v=20260625-3" />
+</head>
+<body>
+  <div class="background-blob blob-1"></div>
+  <div class="background-blob blob-2"></div>
+  <div class="background-blob blob-3"></div>
 
-    <main class="app">
-      <header class="hero">
-        <p class="kicker">USERNAME GENERATOR</p>
-        <h1>Insta Name Lab</h1>
-        <p class="subtitle">
-          Generate cool, trendy, slightly unique Instagram handles inspired by aesthetic username patterns.
-        </p>
-      </header>
+  <main class="container">
+    <header class="header">
+      <h1>InstaName Lab</h1>
+      <p class="tagline">Generate cool, trendy, unique Instagram usernames instantly</p>
+    </header>
 
-      <section class="panel control-hub" aria-label="Studio controls">
-        <h2>Customizations!</h2>
-        <p class="hint">Everything in one place: vibe controls, text fonts, and emoji tools.</p>
+    <div class="content-wrapper">
+      <section class="controls-panel">
+        <h2>Customize Your Vibe</h2>
 
-        <div class="studio-sections">
-          <section class="studio-card" aria-label="Customize your vibe">
-            <h3>Customize Your Vibe</h3>
-            <div class="grid">
-              <label class="field">
-                <span>Theme</span>
-                <select id="theme">
-                  <option value="street">Street</option>
-                  <option value="soft">Soft Aesthetic</option>
-                  <option value="lux">Luxury</option>
-                  <option value="dark">Moody</option>
-                  <option value="dream">Dreamy</option>
-                </select>
-              </label>
-
-              <label class="field">
-                <span>Core Word</span>
-                <input id="seed" type="text" maxlength="16" placeholder="e.g. naima" />
-              </label>
-
-              <label class="field">
-                <span>Media Reference</span>
-                <input id="mediaRef" type="text" maxlength="40" placeholder="e.g. euphoria, naruto, frank ocean" />
-              </label>
-
-              <label class="field">
-                <span>Style</span>
-                <select id="style">
-                  <option value="balanced">Balanced</option>
-                  <option value="minimal">Minimal</option>
-                  <option value="edgy">Edgy</option>
-                  <option value="cute">Cute</option>
-                  <option value="futuristic">Futuristic</option>
-                </select>
-              </label>
-
-              <label class="field">
-                <span>Account Type</span>
-                <select id="accountType">
-                  <option value="personal" selected>Personal</option>
-                  <option value="business">Business</option>
-                </select>
-              </label>
-
-              <label class="field full">
-                <span>Short Description</span>
-                <textarea
-                  id="userDescription"
-                  rows="2"
-                  maxlength="90"
-                  placeholder="e.g. handmade candle shop, travel reels, cozy lifestyle creator"
-                ></textarea>
-              </label>
-
-              <label class="field full">
-                <span>Username Length: <strong id="lengthValue">12</strong></span>
-                <input id="length" type="range" min="6" max="20" value="12" />
-              </label>
-            </div>
-
-            <div class="toggles" role="group" aria-label="Username options">
-              <label><input id="useNumbers" type="checkbox" checked /> Add numbers</label>
-              <label><input id="useDots" type="checkbox" checked /> Allow dots</label>
-              <label><input id="useUnderscore" type="checkbox" checked /> Allow underscores</label>
-              <label><input id="useEmoji" type="checkbox" /> Add emoji flair</label>
-              <label><input id="forceMediaRef" type="checkbox" checked /> Force media reference</label>
-              <label><input id="allowDoubleWord" type="checkbox" checked /> Two-word combos</label>
-              <label><input id="avoidTakenStyle" type="checkbox" checked /> Add uniqueness twist</label>
-            </div>
-          </section>
-
-          <section class="studio-card" aria-label="Customizations block">
-            <h3>Customizations!</h3>
-
-            <div class="custom-block">
-              <h4>Text Font Studio</h4>
-              <div class="grid">
-                <label class="field">
-                  <span>UI Font</span>
-                  <select id="uiFont">
-                    <option value="space" selected>Space Grotesk (Trendy)</option>
-                    <option value="quick">Quicksand (Cute)</option>
-                    <option value="dm">DM Sans (Clean Trendy)</option>
-                    <option value="poppins">Poppins (Modern)</option>
-                    <option value="sora">Sora (Futuristic Cute)</option>
-                    <option value="nunito">Nunito (Soft Rounded)</option>
-                    <option value="playfair">Playfair Display (Aesthetic Serif)</option>
-                    <option value="cormorant">Cormorant Garamond (Soft Editorial)</option>
-                  </select>
-                </label>
-                <label class="field">
-                  <span>Username Font</span>
-                  <select id="resultFont">
-                    <option value="dancing" selected>Dancing Script (Cute)</option>
-                    <option value="pacifico">Pacifico (Playful Script)</option>
-                    <option value="playfair">Playfair Display (Aesthetic)</option>
-                    <option value="cormorant">Cormorant Garamond (Dreamy)</option>
-                    <option value="quick">Quicksand (Modern Cute)</option>
-                    <option value="nunito">Nunito (Rounded)</option>
-                    <option value="sora">Sora (Trendy)</option>
-                    <option value="space">Space Grotesk (Bold Trendy)</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-
-            <div class="custom-block">
-              <h4>Emoji Studio</h4>
-              <div class="grid">
-                <label class="field">
-                  <span>Emoji Vibe</span>
-                  <select id="emojiVibe">
-                    <option value="sparkly" selected>Sparkly</option>
-                    <option value="cute">Cute</option>
-                    <option value="dreamy">Dreamy</option>
-                    <option value="hearts">Hearts</option>
-                    <option value="moody">Moody</option>
-                  </select>
-                </label>
-                <label class="field">
-                  <span>Emoji Placement</span>
-                  <select id="emojiPlacement">
-                    <option value="end" selected>At end</option>
-                    <option value="both">Start + end</option>
-                    <option value="random">Random side</option>
-                  </select>
-                </label>
-                <label class="field full">
-                  <span>Custom Emojis (optional)</span>
-                  <input id="customEmojis" type="text" maxlength="60" placeholder="e.g. 🧸🫶🌸" />
-                </label>
-              </div>
-              <p class="hint">Tap any emoji to copy it.</p>
-              <div id="emojiPreview" class="emoji-preview" aria-live="polite"></div>
-              <p id="emojiCopyStatus" class="hint copy-status" aria-live="polite"></p>
-            </div>
-
-            <div class="custom-block">
-              <h4>Emoticon Studio</h4>
-              <div class="grid">
-                <label class="field">
-                  <span>Emoticon Vibe</span>
-                  <select id="emoticonVibe">
-                    <option value="cute" selected>Cute</option>
-                    <option value="soft">Soft</option>
-                    <option value="kawaii">Kawaii</option>
-                    <option value="moody">Moody</option>
-                    <option value="retro">Retro Chat</option>
-                  </select>
-                </label>
-                <label class="field full">
-                  <span>Custom Emoticons (comma separated)</span>
-                  <input id="customEmoticons" type="text" maxlength="120" placeholder=":3, ^^, x_x, T_T" />
-                </label>
-              </div>
-              <p class="hint">Tap any emoticon to copy it.</p>
-              <div id="emoticonPreview" class="emoji-preview" aria-live="polite"></div>
-              <p id="emoticonCopyStatus" class="hint copy-status" aria-live="polite"></p>
-            </div>
-          </section>
+        <div class="vibe-section">
+          <h3>Your Aesthetic</h3>
+          <label for="theme">
+            <span class="label-text">Theme</span>
+            <select id="theme">
+              <option value="cool">Cool & Trendy</option>
+              <option value="aesthetic">Aesthetic</option>
+              <option value="edgy">Edgy</option>
+              <option value="playful">Playful</option>
+              <option value="minimal">Minimal</option>
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="cottagecore">Cottagecore</option>
+              <option value="vintage">Vintage</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="darkacademia">Dark Academia</option>
+              <option value="retro">Retro</option>
+            </select>
+          </label>
+          <label for="accountType">
+            <span class="label-text">Account Type</span>
+            <select id="accountType">
+              <option value="personal">Personal</option>
+              <option value="business">Business</option>
+              <option value="creative">Creative/Artist</option>
+              <option value="meme">Meme/Humor</option>
+              <option value="gaming">Gaming</option>
+              <option value="beauty">Beauty/Fashion</option>
+            </select>
+          </label>
+          <label for="description">
+            <span class="label-text">Your Vibe (optional)</span>
+            <input
+              id="description"
+              type="text"
+              placeholder="e.g., dreamy, edgy, cottagecore"
+              maxlength="50"
+            />
+          </label>
+          <label for="coreWord">
+            <span class="label-text">Your Core Word</span>
+            <input
+              id="coreWord"
+              type="text"
+              placeholder="e.g., luna, pixel, vibe"
+              maxlength="20"
+            />
+          </label>
+          <label for="style">
+            <span class="label-text">Style</span>
+            <select id="style">
+              <option value="balanced">Balanced</option>
+              <option value="minimalist">Minimalist</option>
+              <option value="elegant">Elegant</option>
+              <option value="playful">Playful</option>
+              <option value="cosmic">Cosmic</option>
+              <option value="dreamy">Dreamy</option>
+              <option value="edgy">Edgy</option>
+              <option value="aesthetic">Aesthetic</option>
+            </select>
+          </label>
+          <label for="length">
+            <span class="label-text">Length: <strong id="lengthValue">12</strong></span>
+            <input id="length" type="range" min="6" max="24" value="12" />
+          </label>
+          <label for="mediaRef">
+            <span class="label-text">Media Reference (optional)</span>
+            <input
+              id="mediaRef"
+              type="text"
+              placeholder="e.g., euphoria, barbie, miyazaki"
+              maxlength="30"
+            />
+          </label>
         </div>
 
-        <button id="generateBtn" class="cta">Generate 12 Names</button>
-      </section>
-
-      <section class="panel output" aria-live="polite">
-        <div class="output-head">
-          <h2>Your Suggestions</h2>
-          <button id="refreshBtn" class="ghost">Refresh</button>
-        </div>
-        <ul id="results" class="results"></ul>
-      </section>
-
-      <section class="panel favorites">
-        <h2>Saved Favorites</h2>
-        <p class="hint">Tap a star to save your top picks.</p>
-        <ul id="favorites" class="favorites-list"></ul>
-      </section>
-
-      <section class="panel community">
-        <h2>Community Username Pool</h2>
-        <p class="hint">Add your own usernames so other people can import and remix them.</p>
-
-        <div class="community-grid">
-          <label class="field full">
-            <span>Add one username</span>
-            <div class="inline-row">
-              <input id="communitySingle" type="text" maxlength="30" placeholder="e.g. moon.whisp" />
-              <button id="addSingleBtn" class="ghost" type="button">Add</button>
-            </div>
-          </label>
-
-          <label class="field full">
-            <span>Paste multiple usernames (one per line)</span>
-            <textarea id="communityBulk" rows="5" placeholder="petal.puree&#10;callme.naima&#10;lacedmistake"></textarea>
-          </label>
-
-          <div class="community-actions">
-            <button id="addBulkBtn" class="ghost" type="button">Add Pasted Usernames</button>
-            <label class="upload-label">
-              <input id="communityFile" type="file" accept=".txt,.csv,.json" />
-              Upload File
+        <div class="vibe-section">
+          <h3>Font & Emoji Studio</h3>
+          <div class="font-emoji-grid">
+            <label for="uiFont">
+              <span class="label-text">UI Font</span>
+              <select id="uiFont">
+                <option value="poppins">Poppins (Modern)</option>
+                <option value="quicksand">Quicksand (Cute)</option>
+                <option value="dmsans">DM Sans (Trendy)</option>
+                <option value="playfair">Playfair (Aesthetic)</option>
+                <option value="nunito">Nunito (Soft)</option>
+                <option value="montserrat">Montserrat (Bold)</option>
+                <option value="fredoka">Fredoka (Friendly)</option>
+                <option value="caveat">Caveat (Handwriting)</option>
+                <option value="righteous">Righteous (Bold Display)</option>
+                <option value="spacemono">Space Mono (Monospace)</option>
+              </select>
             </label>
-            <button id="exportPoolBtn" class="ghost" type="button">Export Pool</button>
+            <label for="resultFont">
+              <span class="label-text">Username Font</span>
+              <select id="resultFont">
+                <option value="poppins">Poppins</option>
+                <option value="dancing">Dancing Script (Cute)</option>
+                <option value="pacifico">Pacifico (Playful)</option>
+                <option value="quicksand">Quicksand (Aesthetic)</option>
+                <option value="montserrat">Montserrat (Bold)</option>
+                <option value="fredoka">Fredoka (Friendly)</option>
+                <option value="caveat">Caveat (Handwriting)</option>
+                <option value="abril">Abril Fatface (Display)</option>
+                <option value="righteous">Righteous (Bold)</option>
+                <option value="spacemono">Space Mono (Monospace)</option>
+                <option value="indie">Indie Flower (Sketch)</option>
+              </select>
+            </label>
+          </div>
+          <label class="toggle emoji-toggle">
+            <input id="includeEmoji" type="checkbox" />
+            <span>Include Emoji in Usernames</span>
+          </label>
+          <label class="toggle emoji-toggle">
+            <input id="includeEmoticons" type="checkbox" />
+            <span>Include Emoticons</span>
+          </label>
+          <div id="emojiThemeSection" class="emoji-theme-section" style="display: none;">
+            <label for="emojiColor">
+              <span class="label-text">Emoji Theme</span>
+              <select id="emojiColor">
+                <option value="all">All Emojis</option>
+                <option value="red">🔴 Red</option>
+                <option value="orange">🟠 Orange</option>
+                <option value="yellow">🟡 Yellow</option>
+                <option value="green">🟢 Green</option>
+                <option value="blue">🔵 Blue</option>
+                <option value="violet">🟣 Violet</option>
+                <option value="white">⚪ White</option>
+                <option value="pink">🩷 Pink</option>
+                <option value="black">⚫ Black</option>
+              </select>
+            </label>
+          </div>
+          <div id="emojiStudio" class="emoji-studio">
+            <p class="emoji-hint" id="emojiHint" style="display: none;">Click any emoji to copy it:</p>
+            <div id="emojiGrid" class="emoji-grid"></div>
+            <p class="emoji-hint" id="emoticonHint" style="display: none;">Click any emoticon to copy it:</p>
+            <div id="emoticonGrid" class="emoticon-grid"></div>
           </div>
         </div>
 
-        <p id="poolStats" class="hint"></p>
-        <ul id="communityPool" class="favorites-list"></ul>
-      </section>
-    </main>
 
-    <template id="resultItemTemplate">
-      <li class="result-item">
-        <span class="username"></span>
-        <div class="actions">
-          <button class="copy">Copy</button>
-          <button class="save" title="Save">☆</button>
+
+        <div class="toggle-group">
+          <label class="toggle">
+            <input id="includeNumbers" type="checkbox" checked />
+            <span>Include Numbers</span>
+          </label>
+          <label class="toggle">
+            <input id="includeDots" type="checkbox" />
+            <span>Include Dots</span>
+          </label>
+          <label class="toggle">
+            <input id="includeUnderscores" type="checkbox" checked />
+            <span>Include Underscores</span>
+          </label>
         </div>
-      </li>
-    </template>
 
-    <script src="script.js"></script>
-  </body>
+        <button id="generateBtn" class="btn btn-primary">Generate Usernames</button>
+      </section>
+
+      <section class="results-panel">
+        <div class="results-header">
+          <h2>Your Usernames</h2>
+          <div class="results-buttons">
+            <button id="copyAllBtn" class="btn btn-secondary" title="Copy all usernames to clipboard">Copy All</button>
+            <button id="refreshBtn" class="btn btn-secondary">Refresh</button>
+          </div>
+        </div>
+        <ul id="resultsList" class="results-list"></ul>
+      </section>
+    </div>
+
+    <section class="favorites-panel">
+      <h2>Saved Favorites</h2>
+      <ul id="favoritesList" class="favorites-list"></ul>
+    </section>
+
+    <section class="community-panel">
+      <h2>Community Username Pool</h2>
+      <p class="community-hint">Share your favorite usernames for others to use and remix!</p>
+      <div class="community-controls">
+        <input id="communityInput" type="text" placeholder="Add a username to share" maxlength="30" />
+        <button id="addCommunityBtn" class="btn btn-primary">Add to Pool</button>
+        <button id="exportPoolBtn" class="btn btn-secondary">Export Pool</button>
+      </div>
+      <ul id="communityPool" class="community-list"></ul>
+    </section>
+  </main>
+
+  <template id="usernameTemplate">
+    <li class="username-item">
+      <span class="username-text"></span>
+      <div class="item-actions">
+        <button class="btn-copy" title="Copy to clipboard">Copy</button>
+        <button class="btn-favorite" title="Save as favorite">♡</button>
+      </div>
+    </li>
+  </template>
+
+  <script src="script.js?v=20260625"></script>
+</body>
 </html>

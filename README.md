@@ -1,46 +1,80 @@
-# Insta Name Lab
+# InstaName Lab - Instagram Username Generator
 
-A stylish single-page web app that generates cool, trendy, and slightly unique Instagram usernames inspired by popular aesthetic naming patterns.
+A beautiful, interactive web app that generates cool, trendy, and unique Instagram usernames with extensive customization options.
 
 ## Features
 
-- Generates 12 username ideas per run.
-- Pattern-based generation inspired by aesthetic username styles (instead of random letter strings).
-- Built-in customization controls:
-	- Theme selector (Street, Soft Aesthetic, Luxury, Moody, Dreamy)
-	- Core word input (seed)
-	- Style selector (Balanced, Minimal, Edgy, Cute, Futuristic)
-	- Length slider
-	- Toggle numbers on/off
-	- Toggle dot/underscore separators
-	- Toggle two-word combos
-	- Toggle uniqueness twists
-- One-click copy for every generated name.
-- Save favorite usernames to a dedicated favorites section.
-- Community username pool:
-	- Add one username manually
-	- Paste multiple usernames in bulk
-	- Upload `.txt`, `.csv`, or `.json` lists
-	- Export pool to JSON so others can import and use your shared set
-- Responsive layout for desktop and mobile.
+✨ **Smart Username Generation**
+- 5 themed wordbanks: Cool & Trendy, Aesthetic, Edgy, Playful, Minimal
+- Coherent, real-word combinations instead of random strings
+- Guaranteed core word inclusion when provided
 
-## Run Locally
+🎨 **Customization Controls**
+- **Core Word**: Your username will always include your chosen word
+- **Media Reference**: Generate usernames inspired by movies, shows, books, etc.
+- **Style Options**: Balanced, Short & Punchy, Long & Descriptive, With Numbers, With Dots/Underscores
+- **Length Slider**: Control username length (6-24 characters)
+- **Toggles**: Enable/disable numbers, dots, underscores, and emoji
 
-1. Open the project folder.
-2. Start a simple local server from this directory:
+📝 **Font Customization**
+- UI Font: Choose between Poppins (Modern), Quicksand (Cute), DM Sans (Trendy), Playfair Display (Aesthetic)
+- Username Font: Pick from Poppins, Dancing Script (Cute), Pacifico (Playful), Quicksand (Aesthetic)
+- Preferences automatically saved to browser
 
-```bash
-python3 -m http.server 5500
-```
+❤️ **Saved Favorites**
+- Save your favorite usernames with one click
+- Persistent storage across sessions
+- Quick copy to clipboard
 
-3. Visit:
+👥 **Community Username Pool**
+- Share usernames you've created with others
+- Build a community library of creative handles
+- Export your pool as JSON for sharing
+- All usernames saved locally in your browser
 
-```text
-http://localhost:5500
-```
+🎨 **Pink & Yellow Theme**
+- Modern gradient background with animated blobs
+- Responsive design for all devices
+- Smooth animations and transitions
 
-## Project Structure
+## How to Use
 
-- `index.html`: UI layout, controls, and community upload section.
-- `styles.css`: Pink/yellow visual theme, responsive behavior, animations.
-- `script.js`: Pattern-based generation logic, favorites, and community pool import/export.
+1. **Open the app** in your browser (open `index.html`)
+2. **Select a theme** that matches your vibe
+3. **Enter a core word** (optional but recommended) - every generated username will include it
+4. **Add media reference** (optional) for thematic inspiration
+5. **Customize your style** with toggles and selections
+6. **Click "Generate Usernames"** to create 12 new options
+7. **Copy** any username with the Copy button
+8. **Save favorites** by clicking the heart icon
+9. **Share with community** by adding your best finds to the pool
+
+## Customization Tips
+
+- **Core Word + Media Reference**: Combine them for super targeted results
+- **Font Pairing**: Try Quicksand + Dancing Script for a cute vibe
+- **Emoji + Numbers**: Great combo for playful, memorable usernames
+- **Underscores**: Use these to break up longer usernames visually
+
+## Storage
+
+All data is stored locally in your browser:
+- Favorites: `localStorage` under `insta_generator_favorites`
+- Community Pool: `localStorage` under `insta_generator_community`
+- Font Preferences: `localStorage` under `font_prefs`
+
+No data is sent to any server.
+
+## Tech Stack
+
+- HTML5
+- CSS3 (with CSS variables for theming)
+- Vanilla JavaScript (no frameworks)
+
+## Files
+
+- `index.html` - Structure and layout
+- `styles.css` - Styling and animations
+- `script.js` - Generation logic and interactions
+
+Enjoy creating your perfect Instagram username! 🌟
